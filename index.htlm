@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phiếu Đăng Ký Xét Tuyển</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #0b132b; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    
+    .card { background-color: #1c2541; border: 1px solid #3a506b; border-radius: 16px; padding: 32px; width: 100%; max-width: 480px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .title { font-size: 22px; font-weight: bold; text-align: center; margin-bottom: 8px; color: #ffffff; }
+    .subtitle { font-size: 13px; text-align: center; color: #a0aec0; margin-bottom: 24px; }
+    
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #cbd5e0; margin-bottom: 6px; }
+    .form-control { width: 100%; padding: 12px 14px; background-color: #0b132b; border: 1px solid #3a506b; border-radius: 8px; color: #ffffff; font-size: 14px; outline: none; transition: 0.3s; }
+    .form-control:focus { border-color: #00b4d8; box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.2); }
+    select.form-control option { background-color: #1c2541; color: #ffffff; }
+    
+    .btn-submit { width: 100%; padding: 14px; background: linear-gradient(90deg, #0077b6, #00b4d8); border: none; border-radius: 8px; color: #ffffff; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+    .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+    .note { text-align: center; font-size: 11px; color: #a0aec0; margin-top: 14px; }
+    
+    .alert { display: none; padding: 12px; border-radius: 8px; font-size: 13px; text-align: center; margin-bottom: 16px; }
+    .alert-success { background-color: #10b981; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="title">Phiếu Đăng Ký Xét Tuyển</div>
+    <div class="subtitle">Điền thông tin nhận lộ trình học tập & nhận thông báo tuyển sinh</div>
+    
+    <div id="statusAlert" class="alert alert-success">Đăng ký thành công! Chúng tôi sẽ liên hệ sớm.</div>
+
+    <form id="admissionForm">
+      <div class="form-group">
+        <label>1. Họ và tên *</label>
+        <input type="text" class="form-control" name="fullName" placeholder="Ví dụ: Nguyễn Văn A" required>
+      </div>
+
+      <div class="form-group">
+        <label>2. Số điện thoại *</label>
+        <input type="tel" class="form-control" name="phone" placeholder="Ví dụ: 0912 345 678" pattern="[0-9]{9,11}" required>
+      </div>
+
+      <div class="form-group">
+        <label>3. Ngành đăng ký dự tuyển *</label>
+        <select class="form-control" name="major" required>
+          <option value="" disabled selected>-- Chọn ngành đăng ký --</option>
+          <option value="Luật">Luật</option>
+          <option value="Quản trị kinh doanh">Quản trị kinh doanh</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>4. Ngành tốt nghiệp bậc đại học *</label>
+        <input type="text" class="form-control" name="degree" placeholder="Ví dụ: Ngôn ngữ Anh, Kế toán..." required>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btnSubmit">NỘP HỒ SƠ XÉT TUYỂN NGAY 🚀</button>
+      <div class="note">🔒 Bảo mật 100% thông tin cá nhân theo quy định.</div>
+    </form>
+  </div>
+
+  <script>
+    // THAY LINK GOOGLE APPS SCRIPT CỦA BẠN VÀO DƯỚI ĐÂY
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjYK2zwRvRJYbAFF5BJpqf6x0I9zxEtXW21zhKcggqVlmUwU-9J5ef0S2ZC7bmCqXE/exec";
+
+    const form = document.getElementById('admissionForm');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const alertBox = document.getElementById('statusAlert');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      btnSubmit.innerText = "Đang gửi dữ liệu...";
+      btnSubmit.disabled = true;
+
+      fetch(SCRIPT_URL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+          alertBox.style.display = 'block';
+          form.reset();
+          btnSubmit.innerText = "NỘP HỒ SƠ XÉT TUYỂN NGAY 🚀";
+          btnSubmit.disabled = false;
+          setTimeout(() => alertBox.style.display = 'none', 5000);
+        })
+        .catch(error => {
+          alert("Lỗi khi gửi dữ liệu, vui lòng thử lại!");
+          btnSubmit.innerText = "NỘP HỒ SƠ XÉT TUYỂN NGAY 🚀";
+          btnSubmit.disabled = false;
+        });
+    });
+  </script>
+</body>
+</html>
